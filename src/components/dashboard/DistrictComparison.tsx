@@ -9,12 +9,14 @@ import {
 } from "recharts";
 
 const data = [
-  { district: "Karachi Central", students: 1250, completion: 85 },
-  { district: "Karachi East", students: 980, completion: 78 },
-  { district: "Karachi West", students: 850, completion: 82 },
-  { district: "Lahore", students: 1100, completion: 88 },
-  { district: "Islamabad", students: 720, completion: 91 },
-  { district: "Peshawar", students: 650, completion: 75 },
+  { district: "Peshawar", students: 1450, completion: 88 },
+  { district: "Swat", students: 1120, completion: 85 },
+  { district: "Mardan", students: 980, completion: 82 },
+  { district: "DI Khan", students: 870, completion: 79 },
+  { district: "Abbottabad", students: 820, completion: 86 },
+  { district: "Swabi", students: 750, completion: 84 },
+  { district: "Upper Dir", students: 680, completion: 81 },
+  { district: "Kohat", students: 620, completion: 77 },
 ];
 
 export function DistrictComparison() {

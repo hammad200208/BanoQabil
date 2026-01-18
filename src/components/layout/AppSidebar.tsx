@@ -84,7 +84,7 @@ export function AppSidebar() {
             <GraduationCap className="w-6 h-6 text-sidebar-primary-foreground" />
           </div>
           <div>
-            <h1 className="font-bold text-sidebar-foreground text-lg">Bano Qabil</h1>
+            <h1 className="font-bold text-sidebar-foreground text-lg">Bano Qabil KPK</h1>
             <p className="text-xs text-sidebar-muted">Training Management</p>
           </div>
         </div>

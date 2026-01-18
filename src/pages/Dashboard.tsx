@@ -22,7 +22,7 @@ export default function Dashboard() {
         <div>
           <h1 className="page-title">Dashboard</h1>
           <p className="page-description">
-            Overview of Bano Qabil 3.0 training program performance
+            Overview of Bano Qabil KPK training program performance
           </p>
         </div>
         <div className="flex items-center gap-3">

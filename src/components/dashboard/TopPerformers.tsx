@@ -2,11 +2,11 @@ import { Trophy, Medal, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const topCenters = [
-  { rank: 1, name: "DHA Center", district: "Karachi", score: 94.5, students: 180 },
-  { rank: 2, name: "Gulshan Campus", district: "Karachi", score: 92.3, students: 165 },
-  { rank: 3, name: "Model Town", district: "Lahore", score: 91.8, students: 145 },
-  { rank: 4, name: "F-8 Center", district: "Islamabad", score: 90.2, students: 120 },
-  { rank: 5, name: "Saddar Campus", district: "Karachi", score: 88.7, students: 155 },
+  { rank: 1, name: "University Town Center", district: "Peshawar", score: 94.5, students: 210 },
+  { rank: 2, name: "Mingora Campus", district: "Swat", score: 92.3, students: 185 },
+  { rank: 3, name: "Main Campus", district: "Mardan", score: 91.8, students: 165 },
+  { rank: 4, name: "Cantonment Center", district: "Abbottabad", score: 90.2, students: 145 },
+  { rank: 5, name: "City Center", district: "DI Khan", score: 88.7, students: 155 },
 ];
 
 const getRankIcon = (rank: number) => {

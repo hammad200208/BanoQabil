@@ -15,8 +15,7 @@ const filterGroups = [
   {
     name: "Program",
     options: [
-      { label: "Bano Qabil 3.0", value: "bq3" },
-      { label: "Bano Qabil 2.0", value: "bq2" },
+      { label: "Bano Qabil KPK", value: "bqkpk" },
     ],
   },
   {
@@ -35,13 +34,21 @@ const filterGroups = [
     ],
   },
   {
+    name: "Region",
+    options: [
+      { label: "South KPK", value: "south" },
+      { label: "North KPK", value: "north" },
+    ],
+  },
+  {
     name: "District",
     options: [
-      { label: "Karachi Central", value: "kc" },
-      { label: "Karachi East", value: "ke" },
-      { label: "Karachi West", value: "kw" },
-      { label: "Lahore", value: "lhr" },
-      { label: "Islamabad", value: "isl" },
+      { label: "Peshawar", value: "psh" },
+      { label: "Swat", value: "swat" },
+      { label: "Mardan", value: "mrd" },
+      { label: "DI Khan", value: "dik" },
+      { label: "Upper Dir", value: "udir" },
+      { label: "Abbottabad", value: "abb" },
     ],
   },
 ];
