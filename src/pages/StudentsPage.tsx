@@ -266,93 +266,184 @@ export default function StudentsPage() {
       </div>
 
       {/* --- Modal --- */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-background p-6 rounded-xl w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">{editingStudent ? "Edit Student" : "Add Student"}</h2>
-            <div className="flex flex-col gap-2">
+{modalOpen && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-background p-6 rounded-xl w-full max-w-lg shadow-xl">
+      {/* Header */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold">
+          {editingStudent ? "Edit Student" : "Add New Student"}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Fill in the student details below
+        </p>
+      </div>
+
+      {/* Form */}
+      <div className="space-y-6">
+
+        {/* --- Personal Information --- */}
+        <div>
+          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+            Personal Information
+          </h3>
+          <div className="grid grid-cols-1 gap-3">
+            <div>
+              <label className="form-label">Full Name</label>
               <input
                 type="text"
-                placeholder="Name"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="input-field"
+                placeholder="John Doe"
               />
+            </div>
+
+            <div>
+              <label className="form-label">Email Address</label>
               <input
                 type="email"
-                placeholder="Email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="input-field"
+                placeholder="john@example.com"
               />
+            </div>
+
+            <div>
+              <label className="form-label">Phone Number</label>
               <input
                 type="text"
-                placeholder="Phone"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="input-field"
+                placeholder="+91 98765 43210"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* --- Academic Details --- */}
+        <div>
+          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+            Academic Details
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="form-label">Trade</label>
               <input
                 type="text"
-                placeholder="Trade"
                 value={form.trade}
                 onChange={(e) => setForm({ ...form, trade: e.target.value })}
                 className="input-field"
+                placeholder="Electrician"
               />
+            </div>
+
+            <div>
+              <label className="form-label">Batch</label>
               <input
                 type="text"
-                placeholder="Batch"
                 value={form.batch}
                 onChange={(e) => setForm({ ...form, batch: e.target.value })}
                 className="input-field"
+                placeholder="2024-A"
               />
+            </div>
+
+            <div>
+              <label className="form-label">Center</label>
               <input
                 type="text"
-                placeholder="Center"
                 value={form.center}
                 onChange={(e) => setForm({ ...form, center: e.target.value })}
                 className="input-field"
+                placeholder="Delhi Training Center"
               />
+            </div>
+
+            <div>
+              <label className="form-label">District</label>
               <input
                 type="text"
-                placeholder="District"
                 value={form.district}
                 onChange={(e) => setForm({ ...form, district: e.target.value })}
                 className="input-field"
+                placeholder="South Delhi"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* --- Performance --- */}
+        <div>
+          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+            Performance
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="form-label">Attendance (%)</label>
               <input
                 type="number"
-                placeholder="Attendance"
+                min={0}
+                max={100}
                 value={form.attendance}
                 onChange={(e) => setForm({ ...form, attendance: Number(e.target.value) })}
                 className="input-field"
               />
+            </div>
+
+            <div>
+              <label className="form-label">Performance (%)</label>
               <input
                 type="number"
-                placeholder="Performance"
+                min={0}
+                max={100}
                 value={form.performance}
                 onChange={(e) => setForm({ ...form, performance: Number(e.target.value) })}
                 className="input-field"
               />
-              <select
-                value={form.status}
-                onChange={(e) => setForm({ ...form, status: e.target.value as Student["status"] })}
-                className="input-field"
-              >
-                <option value="Active">Active</option>
-                <option value="Dropped">Dropped</option>
-                <option value="Completed">Completed</option>
-              </select>
-            </div>
-            <div className="flex justify-end gap-2 mt-4">
-              <button onClick={() => setModalOpen(false)} className="filter-button">Cancel</button>
-              <button onClick={handleSubmit} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg">
-                {editingStudent ? "Update" : "Add"}
-              </button>
             </div>
           </div>
         </div>
-      )}
+
+        {/* --- Status --- */}
+        <div>
+          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+            Student Status
+          </h3>
+          <select
+            value={form.status}
+            onChange={(e) =>
+              setForm({ ...form, status: e.target.value as Student["status"] })
+            }
+            className="input-field"
+          >
+            <option value="Active">Active</option>
+            <option value="Dropped">Dropped</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setModalOpen(false)}
+          className="filter-button"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="bg-primary text-primary-foreground px-5 py-2 rounded-lg font-medium"
+        >
+          {editingStudent ? "Update Student" : "Add Student"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </MainLayout>
   );
 }
