@@ -5,7 +5,6 @@ import {
   Plus,
   Download,
   Upload,
-  MoreHorizontal,
   ChevronLeft,
   ChevronRight,
   Trash,
@@ -22,7 +21,8 @@ export default function StudentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  const [form, setForm] = useState({
+
+  const initialForm: Partial<Student> = {
     name: "",
     email: "",
     phone: "",
@@ -30,16 +30,22 @@ export default function StudentsPage() {
     batch: "",
     center: "",
     district: "",
-    status: "Active" as Student["status"],
+    status: "Active",
     attendance: 0,
     performance: 0,
-  });
+    phase: "",
+    season: "",
+  };
+
+  const [form, setForm] = useState<Partial<Student>>(initialForm);
 
   // --- Load data from localStorage or mock ---
   useEffect(() => {
-    const stored = localStorage.getItem("students");
-    setStudentsData(stored ? JSON.parse(stored) : mockStudents);
-  }, []);
+  const stored = localStorage.getItem("students");
+  const loaded = stored ? JSON.parse(stored) : [];
+  setStudentsData([...mockStudents, ...loaded]);
+}, []);
+
 
   useEffect(() => {
     localStorage.setItem("students", JSON.stringify(studentsData));
@@ -61,18 +67,7 @@ export default function StudentsPage() {
 
   const openAddModal = () => {
     setEditingStudent(null);
-    setForm({
-      name: "",
-      email: "",
-      phone: "",
-      trade: "",
-      batch: "",
-      center: "",
-      district: "",
-      status: "Active",
-      attendance: 0,
-      performance: 0,
-    });
+    setForm(initialForm);
     setModalOpen(true);
   };
 
@@ -89,14 +84,19 @@ export default function StudentsPage() {
   };
 
   const handleSubmit = () => {
+    if (!form.name) {
+      alert("Name is required!");
+      return;
+    }
+
     if (editingStudent) {
       // Edit
       setStudentsData((prev) =>
-        prev.map((s) => (s.id === editingStudent.id ? { ...form, id: editingStudent.id } : s))
+        prev.map((s) => (s.id === editingStudent.id ? { ...form, id: editingStudent.id } as Student : s))
       );
     } else {
       // Add
-      const newStudent: Student = { ...form, id: Date.now() };
+      const newStudent: Student = { ...form, id: Date.now() } as Student;
       setStudentsData((prev) => [...prev, newStudent]);
     }
     setModalOpen(false);
@@ -109,9 +109,7 @@ export default function StudentsPage() {
       <div className="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="page-title">Students</h1>
-          <p className="page-description">
-            Manage and monitor all enrolled students
-          </p>
+          <p className="page-description">Manage and monitor all enrolled students</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="filter-button">
@@ -195,9 +193,9 @@ export default function StudentsPage() {
                         <div
                           className={cn(
                             "h-full rounded-full",
-                            student.attendance >= 80
+                            student.attendance! >= 80
                               ? "bg-success"
-                              : student.attendance >= 60
+                              : student.attendance! >= 60
                               ? "bg-warning"
                               : "bg-destructive"
                           )}
@@ -213,9 +211,9 @@ export default function StudentsPage() {
                         <div
                           className={cn(
                             "h-full rounded-full",
-                            student.performance >= 80
+                            student.performance! >= 80
                               ? "bg-primary"
-                              : student.performance >= 60
+                              : student.performance! >= 60
                               ? "bg-info"
                               : "bg-muted-foreground"
                           )}
@@ -226,10 +224,16 @@ export default function StudentsPage() {
                     </div>
                   </td>
                   <td className="flex gap-2">
-                    <button onClick={() => openEditModal(student)} className="p-2 hover:bg-muted rounded-lg transition-colors">
+                    <button
+                      onClick={() => openEditModal(student)}
+                      className="p-2 hover:bg-muted rounded-lg transition-colors"
+                    >
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button onClick={() => handleDelete(student.id)} className="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                    <button
+                      onClick={() => handleDelete(student.id)}
+                      className="p-2 hover:bg-red-100 rounded-lg transition-colors"
+                    >
                       <Trash className="w-4 h-4 text-destructive" />
                     </button>
                   </td>
@@ -266,184 +270,184 @@ export default function StudentsPage() {
       </div>
 
       {/* --- Modal --- */}
-{modalOpen && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-background p-6 rounded-xl w-full max-w-lg shadow-xl">
+      {modalOpen && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="bg-background p-6 rounded-xl w-full max-w-3xl shadow-xl overflow-auto max-h-[90vh]">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-semibold">
-          {editingStudent ? "Edit Student" : "Add New Student"}
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Fill in the student details below
-        </p>
+        <h2 className="text-xl font-semibold">{editingStudent ? "Edit Student" : "Add New Student"}</h2>
+        <p className="text-sm text-muted-foreground">Fill in the student details below</p>
       </div>
 
       {/* Form */}
-      <div className="space-y-6">
-
-        {/* --- Personal Information --- */}
-        <div>
-          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
-            Personal Information
-          </h3>
-          <div className="grid grid-cols-1 gap-3">
-            <div>
-              <label className="form-label">Full Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="input-field"
-                placeholder="John Doe"
-              />
-            </div>
-
-            <div>
-              <label className="form-label">Email Address</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="input-field"
-                placeholder="john@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="form-label">Phone Number</label>
-              <input
-                type="text"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="input-field"
-                placeholder="+91 98765 43210"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* --- Academic Details --- */}
-        <div>
-          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
-            Academic Details
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="form-label">Trade</label>
-              <input
-                type="text"
-                value={form.trade}
-                onChange={(e) => setForm({ ...form, trade: e.target.value })}
-                className="input-field"
-                placeholder="Electrician"
-              />
-            </div>
-
-            <div>
-              <label className="form-label">Batch</label>
-              <input
-                type="text"
-                value={form.batch}
-                onChange={(e) => setForm({ ...form, batch: e.target.value })}
-                className="input-field"
-                placeholder="2024-A"
-              />
-            </div>
-
-            <div>
-              <label className="form-label">Center</label>
-              <input
-                type="text"
-                value={form.center}
-                onChange={(e) => setForm({ ...form, center: e.target.value })}
-                className="input-field"
-                placeholder="Delhi Training Center"
-              />
-            </div>
-
-            <div>
-              <label className="form-label">District</label>
-              <input
-                type="text"
-                value={form.district}
-                onChange={(e) => setForm({ ...form, district: e.target.value })}
-                className="input-field"
-                placeholder="South Delhi"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* --- Performance --- */}
-        <div>
-          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
-            Performance
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="form-label">Attendance (%)</label>
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={form.attendance}
-                onChange={(e) => setForm({ ...form, attendance: Number(e.target.value) })}
-                className="input-field"
-              />
-            </div>
-
-            <div>
-              <label className="form-label">Performance (%)</label>
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={form.performance}
-                onChange={(e) => setForm({ ...form, performance: Number(e.target.value) })}
-                className="input-field"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* --- Status --- */}
-        <div>
-          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
-            Student Status
-          </h3>
-          <select
-            value={form.status}
-            onChange={(e) =>
-              setForm({ ...form, status: e.target.value as Student["status"] })
-            }
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Personal Information */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-1">
+          <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Personal Information</h3>
+          <input
+            type="text"
+            value={form.name || ""}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            className="input-field mb-2"
+            placeholder="Full Name"
+          />
+          <input
+            type="email"
+            value={form.email || ""}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="input-field mb-2"
+            placeholder="Email Address"
+          />
+          <input
+            type="text"
+            value={form.phone || ""}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
             className="input-field"
-          >
-            <option value="Active">Active</option>
-            <option value="Dropped">Dropped</option>
-            <option value="Completed">Completed</option>
-          </select>
+            placeholder="Phone Number"
+          />
         </div>
+
+        {/* Academic Details */}
+        <div className="col-span-1">
+          <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Academic Details</h3>
+          <input
+            type="text"
+            value={form.trade || ""}
+            onChange={(e) => setForm({ ...form, trade: e.target.value })}
+            className="input-field mb-2"
+            placeholder="Trade"
+          />
+          <input
+            type="text"
+            value={form.batch || ""}
+            onChange={(e) => setForm({ ...form, batch: e.target.value })}
+            className="input-field mb-2"
+            placeholder="Batch"
+          />
+          <input
+            type="text"
+            value={form.center || ""}
+            onChange={(e) => setForm({ ...form, center: e.target.value })}
+            className="input-field mb-2"
+            placeholder="Center"
+          />
+          <input
+            type="text"
+            value={form.district || ""}
+            onChange={(e) => setForm({ ...form, district: e.target.value })}
+            className="input-field mb-2"
+            placeholder="District"
+          />
+          <input
+            type="text"
+            value={form.phase || ""}
+            onChange={(e) => setForm({ ...form, phase: e.target.value })}
+            className="input-field mb-2"
+            placeholder="Phase"
+          />
+          <input
+            type="text"
+            value={form.season || ""}
+            onChange={(e) => setForm({ ...form, season: e.target.value })}
+            className="input-field"
+            placeholder="Season"
+          />
+        </div>
+
+        {/* --- Performance & Status --- */}
+<div>
+  <h3 className="text-sm font-semibold mb-4 text-muted-foreground">Performance Metrics</h3>
+  
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {/* Attendance */}
+    <div>
+      <label className="form-label mb-1">Attendance </label>
+      <div className="flex items-center gap-3">
+        <input
+          type="number"
+          min={0}
+          max={100}
+          value={form.attendance || 0}
+          onChange={(e) => setForm({ ...form, attendance: Number(e.target.value) })}
+          className="input-field flex-1"
+        />
+        <span className="text-sm w-10 text-right font-medium">{form.attendance}%</span>
+      </div>
+      <div className="w-full h-3 bg-gray-200 rounded-full mt-1 overflow-hidden">
+        <div
+          className={cn(
+            "h-full rounded-full transition-all duration-300",
+            form.attendance! >= 80
+              ? "bg-green-500"
+              : form.attendance! >= 60
+              ? "bg-yellow-400"
+              : "bg-red-500"
+          )}
+          style={{ width: `${form.attendance}%` }}
+        />
+      </div>
+    </div>
+
+    {/* Performance */}
+    <div>
+      <label className="form-label mb-1">Performance </label>
+      <div className="flex items-center gap-3">
+        <input
+          type="number"
+          min={0}
+          max={100}
+          value={form.performance || 0}
+          onChange={(e) => setForm({ ...form, performance: Number(e.target.value) })}
+          className="input-field flex-1"
+        />
+        <span className="text-sm w-10 text-right font-medium">{form.performance}%</span>
+      </div>
+      <div className="w-full h-3 bg-gray-200 rounded-full mt-1 overflow-hidden">
+        <div
+          className={cn(
+            "h-full rounded-full transition-all duration-300",
+            form.performance! >= 80
+              ? "bg-blue-500"
+              : form.performance! >= 60
+              ? "bg-indigo-400"
+              : "bg-gray-400"
+          )}
+          style={{ width: `${form.performance}%` }}
+        />
+      </div>
+    </div>
+  </div>
+
+  {/* Status */}
+  <div className="mt-4">
+    <label className="form-label mb-1">Student Status</label>
+    <select
+      value={form.status || "Active"}
+      onChange={(e) => setForm({ ...form, status: e.target.value as Student["status"] })}
+      className="input-field"
+    >
+      <option value="Active">Active</option>
+      <option value="Dropped">Dropped</option>
+      <option value="Completed">Completed</option>
+    </select>
+  </div>
+</div>
       </div>
 
       {/* Footer */}
       <div className="flex justify-end gap-3 mt-6">
-        <button
-          onClick={() => setModalOpen(false)}
-          className="filter-button"
-        >
+        <button onClick={() => setModalOpen(false)} className="filter-button">
           Cancel
         </button>
-        <button
-          onClick={handleSubmit}
-          className="bg-primary text-primary-foreground px-5 py-2 rounded-lg font-medium"
-        >
+        <button onClick={handleSubmit} className="bg-primary text-primary-foreground px-5 py-2 rounded-lg font-medium">
           {editingStudent ? "Update Student" : "Add Student"}
         </button>
       </div>
     </div>
   </div>
 )}
+
+      
     </MainLayout>
   );
 }

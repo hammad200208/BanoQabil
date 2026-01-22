@@ -9,7 +9,6 @@ import {
   Mail,
   Phone,
   Star,
-  Users,
   Trash,
   Edit,
 } from "lucide-react";
@@ -29,11 +28,9 @@ export default function TrainersPage() {
     email: "",
     phone: "",
     specialization: "",
-    batches: 0,
-    students: 0,
     center: "",
     district: "",
-    status: "Active" as "Active" | "On Leave" | "Inactive", // ✅ type-safe
+    status: "Active" as "Active" | "On Leave" | "Inactive", // type-safe
     rating: 0,
     attendance: 0,
   });
@@ -75,8 +72,6 @@ export default function TrainersPage() {
       email: "",
       phone: "",
       specialization: "",
-      batches: 0,
-      students: 0,
       center: "",
       district: "",
       status: "Active",
@@ -99,18 +94,19 @@ export default function TrainersPage() {
   };
 
   const handleSubmit = () => {
-    if (editingTrainer) {
-      // Edit
-      setTrainersData((prev) =>
-        prev.map((t) => (t.id === editingTrainer.id ? { ...form, id: editingTrainer.id } : t))
-      );
-    } else {
-      // Add
-      const newTrainer: Trainer = { ...form, id: Date.now() };
-      setTrainersData((prev) => [...prev, newTrainer]);
-    }
-    setModalOpen(false);
-  };
+  if (editingTrainer) {
+    setTrainersData((prev) =>
+      prev.map((t) =>
+        t.id === editingTrainer.id ? { ...form, id: editingTrainer.id } as Trainer : t
+      )
+    );
+  } else {
+    const newTrainer: Trainer = { ...form, id: Date.now() } as Trainer;
+    setTrainersData((prev) => [...prev, newTrainer]);
+  }
+  setModalOpen(false);
+};
+
 
   // --- JSX ---
   return (
@@ -119,9 +115,7 @@ export default function TrainersPage() {
       <div className="page-header flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="page-title">Trainers</h1>
-          <p className="page-description">
-            Manage and monitor all trainers across KPK centers
-          </p>
+          <p className="page-description">Manage and monitor all trainers across KPK centers</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -198,22 +192,12 @@ export default function TrainersPage() {
                 <span className="text-xs text-muted-foreground">{trainer.district}</span>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-foreground">{trainer.batches}</p>
-                  <p className="text-xs text-muted-foreground">Batches</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-foreground">{trainer.students}</p>
-                  <p className="text-xs text-muted-foreground">Students</p>
-                </div>
-                <div className="text-center">
-                  <p className={cn("text-lg font-semibold flex items-center justify-center gap-1", getRatingColor(trainer.rating))}>
-                    <Star className="w-4 h-4 fill-current" />
-                    {trainer.rating}
-                  </p>
-                  <p className="text-xs text-muted-foreground">Rating</p>
-                </div>
+              <div className="text-center pt-4 border-t border-border">
+                <p className={cn("text-lg font-semibold flex items-center justify-center gap-1", getRatingColor(trainer.rating))}>
+                  <Star className="w-4 h-4 fill-current" />
+                  {trainer.rating}
+                </p>
+                <p className="text-xs text-muted-foreground">Rating</p>
               </div>
 
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
@@ -261,36 +245,121 @@ export default function TrainersPage() {
       </div>
 
       {/* --- Modal --- */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-background p-6 rounded-xl w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">{editingTrainer ? "Edit Trainer" : "Add Trainer"}</h2>
-            <div className="flex flex-col gap-2">
-              <input type="text" placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-field"/>
-              <input type="email" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-field"/>
-              <input type="text" placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-field"/>
-              <input type="text" placeholder="Specialization" value={form.specialization} onChange={(e) => setForm({ ...form, specialization: e.target.value })} className="input-field"/>
-              <input type="number" placeholder="Batches" value={form.batches} onChange={(e) => setForm({ ...form, batches: Number(e.target.value) })} className="input-field"/>
-              <input type="number" placeholder="Students" value={form.students} onChange={(e) => setForm({ ...form, students: Number(e.target.value) })} className="input-field"/>
-              <input type="text" placeholder="Center" value={form.center} onChange={(e) => setForm({ ...form, center: e.target.value })} className="input-field"/>
-              <input type="text" placeholder="District" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} className="input-field"/>
-              <input type="number" placeholder="Rating" value={form.rating} onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })} className="input-field"/>
-              <input type="number" placeholder="Attendance" value={form.attendance} onChange={(e) => setForm({ ...form, attendance: Number(e.target.value) })} className="input-field"/>
-              <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as "Active" | "On Leave" | "Inactive" })} className="input-field">
-                <option value="Active">Active</option>
-                <option value="On Leave">On Leave</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-            <div className="flex justify-end gap-2 mt-4">
-              <button onClick={() => setModalOpen(false)} className="filter-button">Cancel</button>
-              <button onClick={handleSubmit} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg">
-                {editingTrainer ? "Update" : "Add"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+{modalOpen && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="bg-background p-6 rounded-xl w-full max-w-2xl">
+      <h2 className="text-lg font-semibold mb-4">{editingTrainer ? "Edit Trainer" : "Add Trainer"}</h2>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label className="flex flex-col text-sm">
+          Name
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          Email
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          Phone
+          <input
+            type="text"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          Specialization
+          <input
+            type="text"
+            value={form.specialization}
+            onChange={(e) => setForm({ ...form, specialization: e.target.value })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          Center
+          <input
+            type="text"
+            value={form.center}
+            onChange={(e) => setForm({ ...form, center: e.target.value })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          District
+          <input
+            type="text"
+            value={form.district}
+            onChange={(e) => setForm({ ...form, district: e.target.value })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          Rating
+          <input
+            type="number"
+            value={form.rating}
+            onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm">
+          Attendance %
+          <input
+            type="number"
+            value={form.attendance}
+            onChange={(e) => setForm({ ...form, attendance: Number(e.target.value) })}
+            className="input-field"
+          />
+        </label>
+
+        <label className="flex flex-col text-sm sm:col-span-2">
+          Status
+          <select
+            value={form.status}
+            onChange={(e) => setForm({ ...form, status: e.target.value as "Active" | "On Leave" | "Inactive" })}
+            className="input-field"
+          >
+            <option value="Active">Active</option>
+            <option value="On Leave">On Leave</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </label>
+      </div>
+
+      <div className="flex justify-end gap-2 mt-4">
+        <button onClick={() => setModalOpen(false)} className="filter-button">
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg"
+        >
+          {editingTrainer ? "Update" : "Add"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </MainLayout>
   );
 }
