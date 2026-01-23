@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -220,15 +221,15 @@ export default function ProgramsPage() {
 
                 {/* Links */}
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <a href="/trades"><Button size="sm">Trades</Button></a>
-                  <a href="/batches"><Button size="sm">Batches</Button></a>
-                  <a href="/students"><Button size="sm">Students</Button></a>
-                  <a href="/trainers"><Button size="sm">Trainers</Button></a>
-                  <a href="/attendance"><Button size="sm">Attendance</Button></a>
-                  <a href="/performance"><Button size="sm">Performance</Button></a>
-                  <a href="/reports"><Button size="sm">Reports</Button></a>
-                  <a href="/centers"><Button size="sm">Centers</Button></a>
-                  <a href="/districts"><Button size="sm">Districts</Button></a>
+                  <Link to="/trades"><Button size="sm">Trades</Button></Link>
+                  <Link to="/batches"><Button size="sm">Batches</Button></Link>
+                  <Link to="/students"><Button size="sm">Students</Button></Link>
+                  <Link to="/trainers"><Button size="sm">Trainers</Button></Link>
+                  <Link to="/attendance"><Button size="sm">Attendance</Button></Link>
+                  <Link to="/performance"><Button size="sm">Performance</Button></Link>
+                  <Link to="/reports"><Button size="sm">Reports</Button></Link>
+                  <Link to="/centers"><Button size="sm">Centers</Button></Link>
+                  <Link to="/districts"><Button size="sm">Districts</Button></Link>
                 </div>
 
                 {/* Edit/Delete */}

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { students as initialStudents } from "@/lib/mockData";
 import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
@@ -9,6 +11,8 @@ import { Button } from "@/components/ui/button";
 
 type Student = typeof initialStudents[number];
 
+const STUDENTS_PER_PAGE = 20;
+
 export default function PerformancePage() {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [statusFilter, setStatusFilter] = useState<"" | "Active" | "Completed" | "Dropped">("");
@@ -16,6 +20,7 @@ export default function PerformancePage() {
   const [centerFilter, setCenterFilter] = useState("");
   const [tradeFilter, setTradeFilter] = useState("");
   const [districtFilter, setDistrictFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newStudent, setNewStudent] = useState<Student>({
     id: 0,
@@ -40,6 +45,16 @@ export default function PerformancePage() {
     const matchesDistrict = districtFilter ? s.district === districtFilter : true;
     return matchesStatus && matchesBatch && matchesCenter && matchesTrade && matchesDistrict;
   });
+
+  // --- Pagination ---
+  const totalPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * STUDENTS_PER_PAGE;
+  const endIndex = startIndex + STUDENTS_PER_PAGE;
+  const paginatedStudents = filteredStudents.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, batchFilter, centerFilter, tradeFilter, districtFilter]);
 
   // --- Unique values for filters ---
   const uniqueBatches = Array.from(new Set(students.map(s => s.batch)));

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { students as initialStudents, trainers, recentActivity } from "@/lib/mockData";
 import { Card } from "@/components/ui/card";
@@ -8,9 +10,12 @@ import { Button } from "@/components/ui/button";
 
 type Student = typeof initialStudents[number];
 
+const STUDENTS_PER_PAGE = 20;
+
 export default function ReportsPage() {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newStudent, setNewStudent] = useState({
     name: "",
@@ -34,6 +39,16 @@ export default function ReportsPage() {
     s.center.toLowerCase().includes(search.toLowerCase()) ||
     s.district.toLowerCase().includes(search.toLowerCase())
   );
+
+  // --- Pagination ---
+  const totalPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * STUDENTS_PER_PAGE;
+  const endIndex = startIndex + STUDENTS_PER_PAGE;
+  const paginatedStudents = filteredStudents.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
   const totalStudents = filteredStudents.length;
   const totalTrainers = trainers.length;
@@ -224,7 +239,7 @@ export default function ReportsPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredStudents.map(s => (
+            {paginatedStudents.map(s => (
               <tr key={s.id}>
                 <td className="px-4 py-2 border">{s.name}</td>
                 <td className="px-4 py-2 border">{s.email}</td>
@@ -242,6 +257,45 @@ export default function ReportsPage() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+        <button 
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors", currentPage === 1 && "opacity-50 cursor-not-allowed")}
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span>Previous</span>
+        </button>
+        <div className="flex items-center gap-1">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+            const showPage = page <= 3 || page > totalPages - 2 || (page >= currentPage - 1 && page <= currentPage + 1);
+            if (!showPage && page !== 4 && page !== totalPages - 3) return null;
+            
+            return (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={cn(
+                  "w-9 h-9 rounded-lg text-sm font-medium transition-colors",
+                  currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                )}
+              >
+                {page}
+              </button>
+            );
+          })}
+        </div>
+        <button 
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className={cn("flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors", currentPage === totalPages && "opacity-50 cursor-not-allowed")}
+        >
+          <span>Next</span>
+          <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </MainLayout>
   );
