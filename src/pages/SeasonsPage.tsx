@@ -63,6 +63,7 @@ export default function SeasonsPage() {
 
   const [statusFilter, setStatusFilter] = useState<"" | Status>("");
   const [phaseFilter, setPhaseFilter] = useState("");
+  const [seasonFilter, setSeasonFilter] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -136,11 +137,13 @@ export default function SeasonsPage() {
   const filteredSeasons = seasons.filter(s => {
     const matchStatus = statusFilter ? s.status === statusFilter : true;
     const matchPhase = phaseFilter ? s.phase === phaseFilter : true;
-    return matchStatus && matchPhase;
+    const matchSeason = seasonFilter ? s.name === seasonFilter : true;
+    return matchStatus && matchPhase && matchSeason;
   });
 
-  // --- Unique phases for filter dropdown ---
+  // --- Unique phases and seasons for filter dropdowns ---
   const uniquePhases = Array.from(new Set(seasons.map(s => s.phase)));
+  const uniqueSeasonNames = Array.from(new Set(seasons.map(s => s.name)));
 
   return (
     <MainLayout>
@@ -174,6 +177,17 @@ export default function SeasonsPage() {
             <option value="">All Phases</option>
             {uniquePhases.map(p => (
               <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+
+          <select
+            value={seasonFilter}
+            onChange={e => setSeasonFilter(e.target.value)}
+            className="px-3 py-2 border rounded-lg"
+          >
+            <option value="">All Seasons</option>
+            {uniqueSeasonNames.map(s => (
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
 
