@@ -21,6 +21,9 @@ export default function StudentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const STUDENTS_PER_PAGE = 20;
 
   const initialForm: Partial<Student> = {
     name: "",
@@ -43,7 +46,9 @@ export default function StudentsPage() {
   useEffect(() => {
   const stored = localStorage.getItem("students");
   const loaded = stored ? JSON.parse(stored) : [];
-  setStudentsData([...mockStudents, ...loaded]);
+  // Only include students that have phase and season properties
+  const validLoaded = loaded.filter((s: Student) => s.phase && s.season);
+  setStudentsData([...mockStudents, ...validLoaded]);
 }, []);
 
 
@@ -61,9 +66,57 @@ export default function StudentsPage() {
     return styles[status as keyof typeof styles] || "badge-inactive";
   };
 
-  const filteredStudents = studentsData.filter((s) =>
-    s.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Normalize function to ensure consistent comparisons
+  const normalize = (value?: string) =>
+    value?.toLowerCase().replace(/\s+/g, "").trim() || "";
+
+  const filteredStudents = studentsData.filter((s) => {
+    // Search filter
+    const matchesSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Program filter - normalize both values for comparison
+    const programFilter = activeFilters["Program"];
+    const matchesProgram = programFilter
+      ? normalize(s.program) === normalize(programFilter)
+      : true;
+    
+    // Phase filter - normalize both values for comparison
+    const phaseFilter = activeFilters["Phase"];
+    const matchesPhase = phaseFilter
+      ? normalize(s.phase) === normalize(phaseFilter)
+      : true;
+    
+    // Season filter - normalize both values for comparison
+    const seasonFilter = activeFilters["Season"];
+    const matchesSeason = seasonFilter
+      ? normalize(s.season) === normalize(seasonFilter)
+      : true;
+    
+    // Region filter - normalize both values for comparison
+    const regionFilter = activeFilters["Region"];
+    const matchesRegion = regionFilter
+      ? normalize(s.region) === normalize(regionFilter)
+      : true;
+    
+    // District filter - normalize both values for comparison
+    const districtFilter = activeFilters["District"];
+    const matchesDistrict = districtFilter
+      ? normalize(s.district) === normalize(districtFilter)
+      : true;
+    
+    return matchesSearch && matchesProgram && matchesPhase && matchesSeason && matchesRegion && matchesDistrict;
+  });
+
+  // --- Pagination Logic ---
+  const totalPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * STUDENTS_PER_PAGE;
+  const endIndex = startIndex + STUDENTS_PER_PAGE;
+  const paginatedStudents = filteredStudents.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilters, searchQuery]);
 
   const openAddModal = () => {
     setEditingStudent(null);
@@ -131,7 +184,7 @@ export default function StudentsPage() {
       </div>
 
       {/* Filters */}
-      <FilterBar />
+      <FilterBar onFilterChange={setActiveFilters} filters={activeFilters} />
 
       {/* Search & Table */}
       <div className="stat-card">
@@ -168,7 +221,7 @@ export default function StudentsPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredStudents.map((student) => (
+              {paginatedStudents.map((student) => (
                 <tr key={student.id}>
                   <td>
                     <div>
@@ -245,24 +298,45 @@ export default function StudentsPage() {
 
         {/* Pagination */}
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
-          <button className="filter-button">
+          <button 
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={cn("filter-button", currentPage === 1 && "opacity-50 cursor-not-allowed")}
+          >
             <ChevronLeft className="w-4 h-4" />
             <span>Previous</span>
           </button>
           <div className="flex items-center gap-1">
-            {[1, 2, 3, "...", 124, 125].map((page, i) => (
-              <button
-                key={i}
-                className={cn(
-                  "w-9 h-9 rounded-lg text-sm font-medium transition-colors",
-                  page === 1 ? "bg-primary text-primary-foreground" : "hover:bg-muted text-muted-foreground"
-                )}
-              >
-                {page}
-              </button>
-            ))}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+              // Show first 3 pages, last 2 pages, and current page with neighbors
+              const showPage = 
+                page <= 3 || 
+                page > totalPages - 2 || 
+                (page >= currentPage - 1 && page <= currentPage + 1);
+              
+              if (!showPage && page !== 4 && page !== totalPages - 3) return null;
+              
+              return (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={cn(
+                    "w-9 h-9 rounded-lg text-sm font-medium transition-colors",
+                    currentPage === page 
+                      ? "bg-primary text-primary-foreground" 
+                      : "hover:bg-muted text-muted-foreground"
+                  )}
+                >
+                  {page}
+                </button>
+              );
+            })}
           </div>
-          <button className="filter-button">
+          <button 
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className={cn("filter-button", currentPage === totalPages && "opacity-50 cursor-not-allowed")}
+          >
             <span>Next</span>
             <ChevronRight className="w-4 h-4" />
           </button>

@@ -18,9 +18,19 @@ type Trade = {
 const randomBetween = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-// Build default trades with realistic numbers
+// IT field trades
+const itTrades = [
+  "Web Development",
+  "Graphic Design",
+  "Digital Marketing",
+  "Mobile App Dev",
+];
+
+// Build default trades with realistic numbers (IT field only)
 const buildDefaultTrades = (): Trade[] => {
-  const uniqueTrades = Array.from(new Set(students.map(s => s.trade)));
+  const uniqueTrades = Array.from(new Set(students.map(s => s.trade))).filter(
+    trade => itTrades.includes(trade)
+  );
 
   return uniqueTrades.map(trade => {
     const total = randomBetween(400, 500);

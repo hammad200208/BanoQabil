@@ -14,6 +14,8 @@ export type Student = {
   performance: number;
   phase?: string;  
   season?: string;
+  program?: string;
+  region?: string;
 };
 
 export interface Trainer {
@@ -31,236 +33,113 @@ export interface Trainer {
   attendance: number;
 }
 
-export const students: Student[] = [
-  {
-    id: 1,
-    name: "Muhammad Bilal",
-    email: "bilal.khan@email.com",
-    phone: "+92 333 1234567",
-    trade: "Web Development",
-    batch: "BQKPK-WD-001",
-    center: "University Town Center",
-    district: "Peshawar",
-    status: "Active",
-    attendance: 92,
-    performance: 85,
-  },
-  {
-    id: 2,
-    name: "Ayesha Gul",
-    email: "ayesha.gul@email.com",
-    phone: "+92 334 2345678",
-    trade: "Graphic Design",
-    batch: "BQKPK-GD-002",
-    center: "Mingora Campus",
-    district: "Swat",
-    status: "Active",
-    attendance: 88,
-    performance: 91,
-  },
-  {
-    id: 3,
-    name: "Saeed Ahmad",
-    email: "saeed.a@email.com",
-    phone: "+92 335 3456789",
-    trade: "Digital Marketing",
-    batch: "BQKPK-DM-001",
-    center: "Main Campus",
-    district: "Mardan",
-    status: "Active",
-    attendance: 95,
-    performance: 78,
-  },
-  {
-    id: 4,
-    name: "Zainab Shah",
-    email: "zainab.s@email.com",
-    phone: "+92 336 4567890",
-    trade: "Web Development",
-    batch: "BQKPK-WD-003",
-    center: "City Center",
-    district: "DI Khan",
-    status: "Dropped",
-    attendance: 45,
-    performance: 52,
-  },
-  {
-    id: 5,
-    name: "Usman Ali",
-    email: "usman.ali@email.com",
-    phone: "+92 337 5678901",
-    trade: "Mobile App Dev",
-    batch: "BQKPK-MA-001",
-    center: "Cantonment Center",
-    district: "Abbottabad",
-    status: "Active",
-    attendance: 89,
-    performance: 82,
-  },
-  {
-    id: 6,
-    name: "Fatima Noor",
-    email: "fatima.n@email.com",
-    phone: "+92 338 6789012",
-    trade: "Graphic Design",
-    batch: "BQKPK-GD-001",
-    center: "University Town Center",
-    district: "Peshawar",
-    status: "Completed",
-    attendance: 97,
-    performance: 94,
-  },
-    {
-    id: 101,
-    name: "Aisha Khan",
-    email: "aisha.khan@example.com",
-    phone: "03001234567",
-    trade: "Electrical",
-    batch: "Batch 5",
-    center: "Karachi",
-    district: "South",
-    status: "Active",
-    attendance: 95,
-    performance: 88,
-    phase: "Phase 2",
-    season: "Summer",
-  },
-  {
-    id: 102,
-    name: "Bilal Ahmed",
-    email: "bilal.ahmed@example.com",
-    phone: "03007654321",
-    trade: "Plumbing",
-    batch: "Batch 4",
-    center: "Lahore",
-    district: "Central",
-    status: "Completed",
-    attendance: 85,
-    performance: 92,
-    phase: "Phase 1",
-    season: "Spring",
-  },
-  {
-    id: 103,
-    name: "Sadia Malik",
-    email: "sadia.malik@example.com",
-    phone: "03001112233",
-    trade: "Carpentry",
-    batch: "Batch 3",
-    center: "Islamabad",
-    district: "North",
-    status: "Dropped",
-    attendance: 45,
-    performance: 50,
-    phase: "Phase 2",
-    season: "Winter",
-  },
-  {
-    id: 104,
-    name: "Hamza Ali",
-    email: "hamza.ali@example.com",
-    phone: "03009876543",
-    trade: "Electrical",
-    batch: "Batch 5",
-    center: "Karachi",
-    district: "East",
-    status: "Active",
-    attendance: 78,
-    performance: 65,
-    phase: "Phase 3",
-    season: "Summer",
-  },
-  {
-    id: 105,
-    name: "Fatima Noor",
-    email: "fatima.noor@example.com",
-    phone: "03005556677",
-    trade: "Plumbing",
-    batch: "Batch 4",
-    center: "Lahore",
-    district: "West",
-    status: "Active",
-    attendance: 88,
-    performance: 90,
-    phase: "Phase 1",
-    season: "Autumn",
-  },
-  {
-    id: 106,
-    name: "Usman Qadir",
-    email: "usman.qadir@example.com",
-    phone: "03002223344",
-    trade: "Welding",
-    batch: "Batch 2",
-    center: "Faisalabad",
-    district: "Central",
-    status: "Completed",
-    attendance: 92,
-    performance: 85,
-    phase: "Phase 2",
-    season: "Spring",
-  },
-  {
-    id: 107,
-    name: "Hina Iqbal",
-    email: "hina.iqbal@example.com",
-    phone: "03003334455",
-    trade: "Carpentry",
-    batch: "Batch 3",
-    center: "Islamabad",
-    district: "South",
-    status: "Active",
-    attendance: 80,
-    performance: 70,
-    phase: "Phase 2",
-    season: "Winter",
-  },
-  {
-    id: 108,
-    name: "Shahbaz Tariq",
-    email: "shahbaz.tariq@example.com",
-    phone: "03004445566",
-    trade: "Electrical",
-    batch: "Batch 5",
-    center: "Karachi",
-    district: "West",
-    status: "Dropped",
-    attendance: 55,
-    performance: 60,
-    phase: "Phase 3",
-    season: "Summer",
-  },
-  {
-    id: 109,
-    name: "Maryam Saeed",
-    email: "maryam.saeed@example.com",
-    phone: "03006667788",
-    trade: "Plumbing",
-    batch: "Batch 4",
-    center: "Lahore",
-    district: "East",
-    status: "Active",
-    attendance: 98,
-    performance: 95,
-    phase: "Phase 1",
-    season: "Autumn",
-  },
-  {
-    id: 110,
-    name: "Ali Raza",
-    email: "ali.raza@example.com",
-    phone: "03007778899",
-    trade: "Welding",
-    batch: "Batch 2",
-    center: "Faisalabad",
-    district: "North",
-    status: "Completed",
-    attendance: 87,
-    performance: 89,
-    phase: "Phase 2",
-    season: "Spring",
-  },
-];
+// Helper function to generate students
+const generateStudents = (): Student[] => {
+  const trades = ["Web Development", "Graphic Design", "Digital Marketing", "Mobile App Dev", "Electrical", "Plumbing", "Carpentry", "Welding"];
+  const centers = ["University Town Center", "Mingora Campus", "Main Campus", "City Center", "Cantonment Center", "Karachi", "Lahore", "Islamabad", "Faisalabad"];
+  const districts = ["Peshawar", "Swat", "Mardan", "DI Khan", "Abbottabad", "Karachi", "Lahore", "Islamabad", "Faisalabad"];
+  const regions = ["North KPK", "South KPK"];
+  const statuses: ("Active" | "Dropped" | "Completed")[] = ["Active", "Active", "Active", "Dropped", "Completed"];
+  const phases = ["Phase 1", "Phase 2", "Phase 3"];
+  const seasons = ["Spring 2026", "Summer 2026", "Winter 2026", "Autumn 2026"];
+  const programs = ["Bano Qabil KPK"];
+  const firstNames = ["Muhammad", "Ayesha", "Saeed", "Zainab", "Usman", "Fatima", "Aisha", "Bilal", "Sadia", "Hamza", "Hina", "Shahbaz", "Maryam", "Ali", "Hassan", "Rana", "Sara", "Ahmed", "Omar", "Laiba", "Hassan", "Faisal", "Nimra", "Imran", "Amina", "Tariq", "Hafsa", "Karim", "Zehra", "Rashid"];
+  const lastNames = ["Khan", "Gul", "Ahmad", "Shah", "Ali", "Noor", "Malik", "Ahmed", "Tariq", "Saeed", "Qadir", "Iqbal", "Hassan", "Raza", "Hussain", "Ahmed", "Iqbal", "Mahmood", "Zaman", "Mirza"];
+
+  const students: Student[] = [];
+  
+  // Map districts to regions
+  const districtToRegion: { [key: string]: string } = {
+    "Peshawar": "North KPK",
+    "Swat": "North KPK",
+    "Mardan": "North KPK",
+    "DI Khan": "South KPK",
+    "Abbottabad": "North KPK",
+    "Karachi": "South KPK",
+    "Lahore": "South KPK",
+    "Islamabad": "North KPK",
+    "Faisalabad": "South KPK",
+  };
+  
+  // Generate 280 students with distribution:
+  // Phase 1: 100 students
+  // Phase 2: 100 students
+  // Phase 3: 80 students
+  let id = 1;
+  
+  // Phase 1 students (100)
+  for (let i = 0; i < 100; i++) {
+    const seasonOptions = ["Spring 2026", "Summer 2026", "Winter 2026", "Autumn 2026"];
+    const district = districts[i % districts.length];
+    students.push({
+      id: id++,
+      name: `${firstNames[i % firstNames.length]} ${lastNames[i % lastNames.length]}`,
+      email: `student${id}@email.com`,
+      phone: `+92 ${300 + (i % 100)} ${1000000 + i}`,
+      trade: trades[i % trades.length],
+      batch: `BQKPK-${i + 1}`,
+      center: centers[i % centers.length],
+      district: district,
+      region: districtToRegion[district],
+      program: programs[0],
+      status: statuses[i % statuses.length],
+      attendance: 45 + Math.floor(Math.random() * 55),
+      performance: 40 + Math.floor(Math.random() * 60),
+      phase: "Phase 1",
+      season: seasonOptions[i % seasonOptions.length],
+    });
+  }
+  
+  // Phase 2 students (100)
+  for (let i = 0; i < 100; i++) {
+    const seasonOptions = ["Spring 2026", "Summer 2026", "Winter 2026", "Autumn 2026"];
+    const district = districts[i % districts.length];
+    students.push({
+      id: id++,
+      name: `${firstNames[i % firstNames.length]} ${lastNames[(i + 5) % lastNames.length]}`,
+      email: `student${id}@email.com`,
+      phone: `+92 ${300 + (i % 100)} ${1000000 + i}`,
+      trade: trades[i % trades.length],
+      batch: `BQKPK-${i + 100}`,
+      center: centers[i % centers.length],
+      district: district,
+      region: districtToRegion[district],
+      program: programs[0],
+      status: statuses[i % statuses.length],
+      attendance: 45 + Math.floor(Math.random() * 55),
+      performance: 40 + Math.floor(Math.random() * 60),
+      phase: "Phase 2",
+      season: seasonOptions[i % seasonOptions.length],
+    });
+  }
+  
+  // Phase 3 students (80)
+  for (let i = 0; i < 80; i++) {
+    const seasonOptions = ["Spring 2026", "Summer 2026", "Winter 2026", "Autumn 2026"];
+    const district = districts[i % districts.length];
+    students.push({
+      id: id++,
+      name: `${firstNames[i % firstNames.length]} ${lastNames[(i + 10) % lastNames.length]}`,
+      email: `student${id}@email.com`,
+      phone: `+92 ${300 + (i % 100)} ${1000000 + i}`,
+      trade: trades[i % trades.length],
+      batch: `BQKPK-${i + 200}`,
+      center: centers[i % centers.length],
+      district: district,
+      region: districtToRegion[district],
+      program: programs[0],
+      status: statuses[i % statuses.length],
+      attendance: 45 + Math.floor(Math.random() * 55),
+      performance: 40 + Math.floor(Math.random() * 60),
+      phase: "Phase 3",
+      season: seasonOptions[i % seasonOptions.length],
+    });
+  }
+  
+  return students;
+};
+
+export const students: Student[] = generateStudents();
 
 export const trainers: Trainer[] = [
   {

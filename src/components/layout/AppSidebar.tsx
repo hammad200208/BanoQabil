@@ -43,6 +43,8 @@ const navigation: NavItem[] = [
     icon: MapPin,
     children: [
       { title: "Districts", href: "/districts" },
+      { title: "North Districts", href: "/districts/north" },
+      { title: "South Districts", href: "/districts/south" },
       { title: "Centers", href: "/centers" },
     ],
   },

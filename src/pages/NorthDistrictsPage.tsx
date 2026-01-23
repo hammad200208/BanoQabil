@@ -18,39 +18,34 @@ type District = {
 const randomBetween = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-// Helper to determine if a district is North or South
-const getDistrictRegion = (name: string): "North" | "South" | "All" => {
-  const northDistricts = ["Peshawar", "Swat", "Mardan", "Abbottabad"];
-  const southDistricts = ["South", "DI Khan"];
+// Build north districts from mock data
+const buildNorthDistricts = (): District[] => {
+  const northDistrictNames = ["Peshawar", "Swat", "Mardan", "Abbottabad"];
   
-  if (northDistricts.includes(name)) return "North";
-  if (southDistricts.includes(name)) return "South";
-  return "All";
-};
-
-// Build default districts from mock data
-const buildDefaultDistricts = (): District[] => {
-  const uniqueDistricts = Array.from(
+  const uniqueNorthDistricts = Array.from(
     new Set([
-      ...students.map(s => s.district),
-      ...trainers.map(t => t.district),
+      ...students
+        .filter(s => northDistrictNames.includes(s.district))
+        .map(s => s.district),
+      ...trainers
+        .filter(t => northDistrictNames.includes(t.district))
+        .map(t => t.district),
     ])
   );
 
-  return uniqueDistricts.map(district => ({
+  return uniqueNorthDistricts.map(district => ({
     id: crypto.randomUUID(),
     name: district,
-    studentCount: randomBetween(400, 500), // 👈 realistic students
-    trainerCount: randomBetween(15, 20),   // 👈 realistic trainers
+    studentCount: randomBetween(400, 500),
+    trainerCount: randomBetween(15, 20),
   }));
 };
 
-export default function DistrictsPage() {
-  const [districts, setDistricts] = useState<District[]>(buildDefaultDistricts);
+export default function NorthDistrictsPage() {
+  const [districts, setDistricts] = useState<District[]>(buildNorthDistricts);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [regionFilter, setRegionFilter] = useState<"" | "North" | "South">("");
 
   const [form, setForm] = useState({
     name: "",
@@ -109,20 +104,18 @@ export default function DistrictsPage() {
   };
 
   // --- Filtering ---
-  const filteredDistricts = districts.filter(d => {
-    const matchSearch = d.name.toLowerCase().includes(search.toLowerCase());
-    const matchRegion = regionFilter ? getDistrictRegion(d.name) === regionFilter : true;
-    return matchSearch && matchRegion;
-  });
+  const filteredDistricts = districts.filter(d =>
+    d.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <MainLayout>
       {/* Header */}
       <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h1 className="page-title">Districts</h1>
+          <h1 className="page-title">North Districts</h1>
           <p className="page-description">
-            Overview of training districts and participants
+            Overview of training districts in North region and participants
           </p>
         </div>
 
@@ -134,16 +127,6 @@ export default function DistrictsPage() {
             onChange={e => setSearch(e.target.value)}
             className="px-3 py-2 border rounded-lg"
           />
-
-          <select
-            value={regionFilter}
-            onChange={e => setRegionFilter(e.target.value as "" | "North" | "South")}
-            className="px-3 py-2 border rounded-lg"
-          >
-            <option value="">All Regions</option>
-            <option value="North">North</option>
-            <option value="South">South</option>
-          </select>
 
           <Button onClick={() => setShowForm(!showForm)}>
             {showForm ? "Close Form" : "Add District"}

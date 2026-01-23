@@ -14,8 +14,6 @@ type Phase = {
   active: number;
   completed: number;
   dropped: number;
-  batches: string;
-  trainers: string;
   status: "Active" | "Completed" | "Dropped";
 };
 
@@ -23,38 +21,32 @@ type Phase = {
 const defaultPhases: Phase[] = [
   {
     id: "1",
-    name: "Module 1",
+    name: "Phase 1",
     season: "Spring 2026",
     total: 25,
     active: 20,
     completed: 4,
     dropped: 1,
-    batches: "Batch A, Batch B",
-    trainers: "John Doe, Jane Smith",
     status: "Active",
   },
   {
     id: "2",
-    name: "Module 2",
+    name: "Phase 2",
     season: "Summer 2026",
     total: 18,
     active: 15,
     completed: 2,
     dropped: 1,
-    batches: "Batch C",
-    trainers: "Alice Johnson",
     status: "Active",
   },
   {
     id: "3",
-    name: "Module 3",
+    name: "Phase 3",
     season: "Fall 2026",
     total: 30,
     active: 25,
     completed: 4,
     dropped: 1,
-    batches: "Batch D, Batch E",
-    trainers: "Bob Brown",
     status: "Completed",
   },
 ];
@@ -75,8 +67,6 @@ export default function PhasesPage() {
     active: 0,
     completed: 0,
     dropped: 0,
-    batches: "",
-    trainers: "",
     status: "Active" as Status,
   });
 
@@ -124,8 +114,6 @@ export default function PhasesPage() {
       active: 0,
       completed: 0,
       dropped: 0,
-      batches: "",
-      trainers: "",
       status: "Active",
     });
   };
@@ -256,21 +244,7 @@ export default function PhasesPage() {
 </div>
 
 
-          <input
-            type="text"
-            placeholder="Batches (comma separated)"
-            value={form.batches}
-            onChange={e => setForm({ ...form, batches: e.target.value })}
-            className="w-full px-3 py-2 border rounded"
-          />
 
-          <input
-            type="text"
-            placeholder="Trainers (comma separated)"
-            value={form.trainers}
-            onChange={e => setForm({ ...form, trainers: e.target.value })}
-            className="w-full px-3 py-2 border rounded"
-          />
 
           <div className="flex gap-2">
             {editingId ? (
@@ -301,8 +275,6 @@ export default function PhasesPage() {
               <span>Dropped: {phase.dropped}</span>
             </div>
             <div className="text-sm text-muted-foreground">Season: {phase.season}</div>
-            <div className="text-sm text-muted-foreground">Batches: {phase.batches || "N/A"}</div>
-            <div className="text-sm text-muted-foreground">Trainers: {phase.trainers || "N/A"}</div>
 
             <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
               <div

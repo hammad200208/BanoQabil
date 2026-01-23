@@ -7,6 +7,8 @@ import ProgramsPage from "./pages/ProgramsPage";
 import PhasesPage from "./pages/PhasesPage";
 import SeasonsPage from "./pages/SeasonsPage";
 import DistrictsPage from "./pages/DistrictsPage";
+import NorthDistrictsPage from "./pages/NorthDistrictsPage";
+import SouthDistrictsPage from "./pages/SouthDistrictsPage";
 import CentersPage from "./pages/CentersPage";
 import TradesPage from "./pages/TradesPage";
 import BatchesPage from "./pages/BatchesPage";
@@ -34,6 +36,8 @@ const App = () => (
           <Route path="/phases" element={<PhasesPage />} />
           <Route path="/seasons" element={<SeasonsPage />} />
           <Route path="/districts" element={<DistrictsPage />} />
+          <Route path="/districts/north" element={<NorthDistrictsPage />} />
+          <Route path="/districts/south" element={<SouthDistrictsPage />} />
           <Route path="/centers" element={<CentersPage />} />
           <Route path="/trades" element={<TradesPage />} />
           <Route path="/batches" element={<BatchesPage />} />

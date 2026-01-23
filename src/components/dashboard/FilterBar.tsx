@@ -9,6 +9,7 @@ interface FilterOption {
 
 interface FilterBarProps {
   onFilterChange?: (filters: Record<string, string>) => void;
+  filters?: Record<string, string>;
 }
 
 const filterGroups = [
@@ -29,8 +30,10 @@ const filterGroups = [
   {
     name: "Season",
     options: [
-      { label: "Winter 2024", value: "w24" },
-      { label: "Summer 2025", value: "s25" },
+      { label: "Spring 2026", value: "sp26" },
+      { label: "Summer 2026", value: "s26" },
+      { label: "Winter 2026", value: "w26" },
+      { label: "Autumn 2026", value: "a26" },
     ],
   },
   {
@@ -53,26 +56,22 @@ const filterGroups = [
   },
 ];
 
-export function FilterBar({ onFilterChange }: FilterBarProps) {
-  const [activeFilters, setActiveFilters] = useState<Record<string, string>>({});
+export function FilterBar({ onFilterChange, filters = {} }: FilterBarProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const handleSelect = (groupName: string, value: string, label: string) => {
-    const newFilters = { ...activeFilters, [groupName]: label };
-    setActiveFilters(newFilters);
+    const newFilters = { ...filters, [groupName]: label };
     setOpenDropdown(null);
     onFilterChange?.(newFilters);
   };
 
   const clearFilter = (groupName: string) => {
-    const newFilters = { ...activeFilters };
+    const newFilters = { ...filters };
     delete newFilters[groupName];
-    setActiveFilters(newFilters);
     onFilterChange?.(newFilters);
   };
 
   const clearAll = () => {
-    setActiveFilters({});
     onFilterChange?.({});
   };
 
@@ -90,10 +89,10 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
               onClick={() => setOpenDropdown(openDropdown === group.name ? null : group.name)}
               className={cn(
                 "filter-button",
-                activeFilters[group.name] && "bg-primary/10 border-primary/30 text-primary"
+                filters[group.name] && "bg-primary/10 border-primary/30 text-primary"
               )}
             >
-              <span>{activeFilters[group.name] || group.name}</span>
+              <span>{filters[group.name] || group.name}</span>
               <ChevronDown className="w-4 h-4" />
             </button>
 
@@ -113,10 +112,10 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
           </div>
         ))}
 
-        {Object.keys(activeFilters).length > 0 && (
+        {Object.keys(filters).length > 0 && (
           <>
             <div className="h-6 w-px bg-border" />
-            {Object.entries(activeFilters).map(([key, value]) => (
+            {Object.entries(filters).map(([key, value]) => (
               <span
                 key={key}
                 className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm"

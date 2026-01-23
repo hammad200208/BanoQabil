@@ -19,9 +19,14 @@ type Batch = {
 const randomBetween = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
+// Batches to exclude
+const excludedBatches = ["Batch 2", "Batch 3", "Batch 4", "Batch 5"];
+
 // Build default batches with realistic numbers
 const buildDefaultBatches = (): Batch[] => {
-  const uniqueBatches = Array.from(new Set(students.map(s => s.batch)));
+  const uniqueBatches = Array.from(new Set(students.map(s => s.batch))).filter(
+    batch => !excludedBatches.includes(batch)
+  );
 
   return uniqueBatches.map(batch => {
     const total = randomBetween(400, 500);

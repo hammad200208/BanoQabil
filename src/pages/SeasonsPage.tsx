@@ -31,7 +31,7 @@ const defaultSeasons: Season[] = [
     completed: 8,
     dropped: 2,
     status: "Active",
-    phase: "Module 1",
+    phase: "Phase 1",
   },
   {
     id: "2",
@@ -41,7 +41,7 @@ const defaultSeasons: Season[] = [
     completed: 8,
     dropped: 2,
     status: "Active",
-    phase: "Module 2",
+    phase: "Phase 2",
   },
   {
     id: "3",
@@ -51,7 +51,7 @@ const defaultSeasons: Season[] = [
     completed: 8,
     dropped: 2,
     status: "Active",
-    phase: "Module 3",
+    phase: "Phase 3",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function SeasonsPage() {
     completed: 0,
     dropped: 0,
     status: "Active" as Status,
-    phase: "Module 1",
+    phase: "Phase 1",
   });
 
   // 🔁 Auto-calc total
@@ -125,7 +125,7 @@ export default function SeasonsPage() {
       completed: 0,
       dropped: 0,
       status: "Active",
-      phase: "Module 1",
+      phase: "Phase 1",
     });
     setEditingId(null);
     setShowForm(false);
@@ -283,7 +283,7 @@ export default function SeasonsPage() {
             onChange={e => setForm({ ...form, phase: e.target.value })}
             className="w-full px-3 py-2 border rounded"
           >
-            {["Module 1", "Module 2", "Module 3"].map(p => (
+            {["Phase 1", "Phase 2", "Phase 3"].map(p => (
               <option key={p} value={p}>{p}</option>
             ))}
           </select>

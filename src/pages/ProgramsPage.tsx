@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 
 // Phases
 const phases = [
-  { key: "phase1", name: "Module 1" },
-  { key: "phase2", name: "Module 2" },
-  { key: "phase3", name: "Module 3" },
+  { key: "phase1", name: "Phase 1" },
+  { key: "phase2", name: "Phase 2" },
+  { key: "phase3", name: "Phase 3" },
 ];
 
 // Seasons
@@ -32,11 +32,9 @@ type Program = {
   season: string;
 };
 
-// Default programs (3 by default)
+// Default programs (1 by default)
 const defaultPrograms: Program[] = [
-  { id: "1", name: "Bano Qabil KPK", status: "Active", phase: "Module 1", season: "Spring 2026" },
-  { id: "2", name: "Bano Qabil KPK", status: "Completed", phase: "Module 2", season: "Summer 2026" },
-  { id: "3", name: "Bano Qabil KPK", status: "Active", phase: "Module 3", season: "Fall 2026" },
+  { id: "1", name: "Bano Qabil KPK", status: "Active", phase: "Phase 1", season: "Spring 2026" },
 ];
 
 export default function ProgramsPage() {
